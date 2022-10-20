@@ -1,8 +1,46 @@
-import { Link } from "react-router-dom";
 import styled from "styled-components"
 import logo from "../assets/logo.jpg"
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../context/auth";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function Login() {
+
+    const [email, setEmail] = useState(undefined)
+    const [password, setPassword] = useState(undefined)
+
+    const { signIn, user, setUserData } = useContext(AuthContext)
+    
+    const navigate = useNavigate()
+
+    function handleLogin(e){
+        e.preventDefault();
+
+        signIn(email, password)
+        console.log("dados armazenados");
+
+        const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login'
+        const body = {
+            email: user.email,
+            password: user.password
+        }
+
+        axios.post(URL, body)
+            .then((res) => {
+                console.log(res.data)
+                setUserData(res.data)
+                alert("Seja bem-vindo!")
+                navigate("/hoje")
+            })
+            .catch((err) => {
+                alert(`Algo de errado não está certo. ${err.response.data.message}
+                Tente novamente!`)
+                console.log(err)
+            })
+    }
 
     return (
         <PageContainer>
@@ -12,12 +50,20 @@ export default function Login() {
                 <input
                     name="email"
                     placeholder="email"
-                    type="email"/>
+                    type="email"
+                    value={email}
+                    required
+                    onChange={e => setEmail(e.target.value)}
+                />
                 <input
-                    name="email"
+                    name="senha"
                     placeholder="senha"
-                    type="email"/>
-                <button type="submit"> Entrar </button>
+                    type="password"
+                    value={password}
+                    required
+                    onChange={e => setPassword(e.target.value)}
+                />
+                <button type="submit" onClick={handleLogin}> Entrar </button>
             </Form>
 
             <Link to="/cadastro"> Não tem uma conta? Cadastre-se! </Link>

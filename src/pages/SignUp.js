@@ -1,8 +1,43 @@
-import { Link } from "react-router-dom";
+import axios from 'axios'
 import styled from "styled-components"
 import logo from "../assets/logo.jpg"
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useContext } from "react";
+import { AuthContext } from "../context/auth";
 
 export default function SignUp() {
+
+    const [email, setEmail] = useState(undefined)
+    const [password, setPassword] = useState(undefined)
+    const [name, setName] = useState(undefined)
+    const [photo, setPhoto] = useState(undefined)
+
+    const { signIn, user } = useContext(AuthContext)
+
+    const navigate = useNavigate()
+
+    function registerUser(e){
+        e.preventDefault();
+
+        signIn(email, password, name, photo)
+        console.log("dados enviados para user")
+
+        const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up'
+
+        axios.post(URL, user)
+            .then((res) => {
+                console.log(res.data)
+                console.log("Usuário cadastrado com sucesso!")
+                navigate("/")
+            })
+            .catch((err) => {
+                alert(`Não foi possível finalizar seu cadastro. ${err.response.data.message}
+                Tente novamente!`)
+                console.log(err)
+            })
+    }
 
     return (
         <PageContainer>
@@ -13,23 +48,35 @@ export default function SignUp() {
                     name="email"
                     placeholder="email"
                     type="email"
+                    value={email}
+                    required
+                    onChange={e => setEmail(e.target.value)}
                 />
                 <input
-                    name="email"
+                    name="password"
                     placeholder="senha"
-                    type="email"
+                    type="password"
+                    value={password}
+                    required
+                    onChange={e => setPassword(e.target.value)}
                 />
                 <input
                     name="name"
                     placeholder="nome"
                     type="text"
+                    value={name}
+                    required
+                    onChange={e => setName(e.target.value)}
                 />
                 <input
                     name="photo"
                     placeholder="foto"
                     type="url"
+                    value={photo}
+                    required
+                    onChange={e => setPhoto(e.target.value)}
                 />
-                <button type="submit"> Cadastrar </button>
+                <button type="submit" onClick={registerUser}> Cadastrar </button>
             </Form>
 
             <Link to="/"> Já tem uma conta? Faça login! </Link>

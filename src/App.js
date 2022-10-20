@@ -5,19 +5,23 @@ import SignUp from "./pages/SignUp"
 import Today from "./pages/Today"
 import Habits from "./pages/Habits"
 import History from "./pages/History"
+import AuthProvider from "./context/auth"
 
 function App() {
   return (
     <BrowserRouter>
       <GlobalStyle />
 
-      <Routes>
-        <Route path="/" element={<Login />}/>
-        <Route path="/cadastro" element={<SignUp />}/>
-        <Route path="/hoje" element={<Today />}/>
-        <Route path="/habitos" element={<Habits />}/>
-        <Route path="/historico" element={<History />}/>
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<Login />}/>
+          <Route path="/cadastro" element={<SignUp />}/>
+          <Route path="/hoje" element={<Today />}/>
+          <Route path="/habitos" element={<Habits />}/>
+          <Route path="/historico" element={<History />}/>
+        </Routes>
+      </AuthProvider>
+
     </BrowserRouter>
   )
 }
