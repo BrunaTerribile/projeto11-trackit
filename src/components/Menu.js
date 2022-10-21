@@ -1,12 +1,14 @@
 import styled from "styled-components"
+import { Link } from "react-router-dom"
 
 
 export default function Menu() {
+    
     return (
         <BottomBar>
-            <h1>Hábitos</h1>
-            <div>Hoje</div>
-            <h1>Histórico</h1>
+            <StyledLink to={'/habitos'}><h1>Hábitos</h1></StyledLink>
+            <div><StyledLink to={'/hoje'}>Hoje</StyledLink></div>
+            <StyledLink to={'/historico'}><h1>Histórico</h1></StyledLink>
         </BottomBar>
     )
 }
@@ -23,17 +25,14 @@ const BottomBar = styled.div`
     font-family: 'Lexend Deca', sans-serif;
     font-size: 18px;
     z-index: 2;
-
-    h1 {
-        color: #52B6FF;
-    }
+    text-decoration: none;
 
     div {
         display: flex;
         align-items: center;
         justify-content: center;
         background-color: #52B6FF;
-        color: white;
+        color: red;
         width: 91px;
         height: 91px;
         border-radius: 50px;
@@ -41,3 +40,16 @@ const BottomBar = styled.div`
         bottom: 15px;
     }
 `
+
+const StyledLink = styled(Link)`
+    text-decoration: none;
+    color: white;
+
+    &:focus, &:hover, &:visited, &:link, &:active {
+        text-decoration: none;
+    }
+
+    h1 {
+        color: #52B6FF;
+    }
+`;
