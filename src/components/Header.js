@@ -1,12 +1,17 @@
 import styled from "styled-components"
-import photo from "../assets/user.png"
+import { useContext } from "react";
+import { AuthContext } from "../context/auth";
+import photo from "../assets/userback.png"
 
 export default function Header() {
+
+    const { userData } = useContext(AuthContext)
+    //console.log(userData)
 
     return (
         <Head>
             <h1>TrackIt</h1>
-            <img src={photo} alt="foto do usuário"/>
+            {userData.image !== '' ? (<img src={userData.image} alt="foto do usuário"/>) : (<img src={photo} alt="foto do usuário"/>)}
         </Head>
     )
 }
@@ -31,5 +36,7 @@ const Head = styled.div`
 
     img {
         border-radius: 50px;
+        width: 51px;
+        height: 51px;
     }
 `
