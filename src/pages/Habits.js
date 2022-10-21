@@ -2,8 +2,12 @@ import styled from "styled-components"
 import Header from "../components/Header"
 import Menu from "../components/Menu"
 import icone from "../assets/trash-outline.svg"
+import NewHabit from "../components/NewHabit"
+import { useContext } from "react";
+import { AuthContext } from "../context/auth";
 
 export default function Habits() {
+    const { showBox, setShowBox } = useContext(AuthContext)
 
     return (
         <>
@@ -12,33 +16,15 @@ export default function Habits() {
             <Main>
                 <Title>
                     <h1>Meus hábitos</h1>
-                    <div> + </div>
+                    <button onClick={() => setShowBox(true)}> + </button>
                 </Title>
 
-                <NewHabit>
-                    <input
-                        name="habito"
-                        type="text"
-                        placeholder="nome do hábito"
-                    />
-                    <Days>
-                        <div>D</div>
-                        <div>S</div>
-                        <div>T</div>
-                        <div>Q</div>
-                        <div>Q</div>
-                        <div>S</div>
-                        <div>S</div>
-                    </Days>
-                    <Buttons>
-                        <button className="white">Cancelar</button>
-                        <button className="blue">Salvar</button>
-                    </Buttons>
-                </NewHabit>
+                {showBox ? <NewHabit /> : null}
 
-                <Habit>
+                {/* <Habit>
                     <h1> Ler 1 capítulo de livro </h1>
                     <Days>
+
                         <div>D</div>
                         <div>S</div>
                         <div>T</div>
@@ -47,8 +33,8 @@ export default function Habits() {
                         <div>S</div>
                         <div>S</div>
                     </Days>
-                    <img src={icone} alt="lixeira"/>
-                </Habit>
+                    <img src={icone} alt="lixeira" />
+                </Habit> */}
 
                 <p> Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear! </p>
             </Main>
@@ -76,7 +62,7 @@ const Main = styled.div`
     }
 `
 
-const Title =  styled.div`
+const Title = styled.div`
     width: 100%;
     height: 75px;
     display: flex;
@@ -88,7 +74,7 @@ const Title =  styled.div`
         color: #126BA5;
     }
 
-    div {
+    button {
         width: 40px;
         height: 40px;
         border-radius: 5px;
@@ -98,28 +84,6 @@ const Title =  styled.div`
         display: flex;
         align-items: center;
         justify-content: center;
-    }
-`
-
-const NewHabit = styled.div`
-    width: 340px;
-    height: 180px;
-    background-color: white;
-    border-radius: 5px;
-    padding: 18px;
-    margin-bottom: 30px;
-
-    input {
-        width: 303px;
-        height: 45px;
-        font-family: 'Lexend Deca', sans-serif;
-        border: 1px solid #D4D4D4;
-        margin-bottom: 6px;
-
-        ::placeholder {
-            color: #DBDBDB;
-            font-style: normal;
-        }
     }
 `
 
@@ -158,33 +122,17 @@ const Days = styled.div`
         justify-content: center;
         border: 1px solid #D4D4D4;
         border-radius: 5px;
-        color: #DBDBDB;
         font-size: 20px;
         margin-right: 5px;
     }
-`
 
-const Buttons = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    margin-top: 20px;
-
-    button {
-        width: 84px;
-        height: 35px;
-        margin-left: 10px;
-        font-family: 'Lexend Deca', sans-serif;
-        font-size: 16px;
-    }
-
-    .white {
+    .off {
         background-color: white;
-        color: #52B6FF;
+        color: #DBDBDB;
     }
 
-    .blue {
-        background-color: #52B6FF;
+    .on {
+        background-color: #E5E5E5;
         color: white;
     }
 `

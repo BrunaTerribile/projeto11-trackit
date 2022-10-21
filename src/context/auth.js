@@ -7,6 +7,8 @@ export default function AuthProvider({children}){
     
     const [user, setUser] = useState({})
     const [userData, setUserData] = useState({})
+    const [showBox, setShowBox] = useState(false)
+    const [myHabits, setMyHabits] = useState([])
 
     function signIn(email, password, name, photo){
         if(email !== '' && password !== ''){
@@ -17,11 +19,11 @@ export default function AuthProvider({children}){
                 image: photo
             })
             console.log("dados recebidos com sucesso - auth")
-        }  
+        }
     }
     
     return (
-        <AuthContext.Provider value={{signIn, user, userData, setUserData}}>
+        <AuthContext.Provider value={{signIn, user, userData, setUserData, showBox, setShowBox, myHabits, setMyHabits}}>
             {children}
         </AuthContext.Provider>
     )
