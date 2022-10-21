@@ -8,7 +8,7 @@ export default function NewHabit() {
     const days = ["D", "S", "T", "Q", "Q", "S", "S"]
     const [selecDay, setSelecDay] = useState([])
     const [habitName, setHabitName] = useState("")
-    const { userData, setShowBox } = useContext(AuthContext)
+    const { userData, setShowBox, myHabits, setMyHabits } = useContext(AuthContext)
 
     function selectDay(i) {
         console.log(i)
@@ -23,8 +23,7 @@ export default function NewHabit() {
         }
     }
 
-    function saveHabit(event) {
-        event.preventDefault();
+    function saveHabit() {
 
         const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits'
         const body = {
@@ -37,10 +36,10 @@ export default function NewHabit() {
             .then((res) => {
                 console.log("hábito registrado com sucesso!")
                 console.log(res.data)
+               // let lastHabit = (res.data)
+                //setMyHabits(...myHabits, lastHabit )
             })
-            .catch((err) => {
-                console.log(err)
-            })
+            .catch((err) => {console.log(err)})
     }
 
 

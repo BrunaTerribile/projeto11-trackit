@@ -3,11 +3,37 @@ import Header from "../components/Header"
 import Menu from "../components/Menu"
 import icone from "../assets/trash-outline.svg"
 import NewHabit from "../components/NewHabit"
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../context/auth";
+import axios from "axios"
 
 export default function Habits() {
-    const { showBox, setShowBox } = useContext(AuthContext)
+    const week = ["D", "S", "T", "Q", "Q", "S", "S"]
+    const { showBox, setShowBox, userData, myHabits, setMyHabits } = useContext(AuthContext)
+
+    useEffect(() => {
+        const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits'
+        const token = userData.token
+        
+        axios.get(URL, {headers: {'Authorization': `Bearer ${token}`}})
+            .then( (res) => {setMyHabits(res.data)
+                            console.log(res.data)})
+            .catch((err) => {console.log(err)})
+    }, [])
+
+    function ListHabits(){          
+        if(myHabits.lenght === 0){
+            return <p> Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear! </p>
+        } else {
+            myHabits.map( (h) => <Habit>
+                <h1> {h.name} </h1>
+                <Days>
+                    {h.days.map ((d) => <div>{d}</div> )}
+                </Days>
+                <img src={icone} alt="lixeira" />
+            </Habit>)
+        }
+    }
 
     return (
         <>
@@ -21,22 +47,15 @@ export default function Habits() {
 
                 {showBox ? <NewHabit /> : null}
 
-                {/* <Habit>
-                    <h1> Ler 1 capítulo de livro </h1>
-                    <Days>
+                {myHabits.lenght === 0 ? <p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>
+                                    : myHabits.map( (h) => <Habit><h1> {h.name} </h1>
+                                    <Days> {week.map ((d, i) => 
+                                    h.days.includes(i) ? 
+                                    <div className="on">{d}</div> 
+                                    : <div className="off">{d}</div> )} </Days>
+                                    <img src={icone} alt="lixeira" /></Habit>)
+                }
 
-                        <div>D</div>
-                        <div>S</div>
-                        <div>T</div>
-                        <div>Q</div>
-                        <div>Q</div>
-                        <div>S</div>
-                        <div>S</div>
-                    </Days>
-                    <img src={icone} alt="lixeira" />
-                </Habit> */}
-
-                <p> Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear! </p>
             </Main>
 
             <Menu />
