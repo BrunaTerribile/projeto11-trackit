@@ -35,6 +35,23 @@ export default function Habits() {
         }
     }
 
+    function deleteHabit(props){
+        let thisId = props
+        let result = window.confirm("Tem certeza que deseja deletar esse hábito?")
+        if(result === true){ // caso de ok - deletar
+            const newList = myHabits.filter((h) => h.id !== thisId)
+            setMyHabits(newList)
+
+            const URL = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${thisId}`
+            const token = userData.token
+
+            axios.delete(URL, {headers: {'Authorization': `Bearer ${token}`}})
+                .then((res) => {console.log(res.data)
+                                console.log("habito excluido do servidor")})
+                .catch((err) => {console.log(err)})
+        }
+    }
+
     return (
         <>
             <Header />
@@ -48,12 +65,12 @@ export default function Habits() {
                 {showBox ? <NewHabit /> : null}
 
                 {myHabits.lenght === 0 ? <p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>
-                                    : myHabits.map( (h) => <Habit><h1> {h.name} </h1>
+                                    : myHabits.map( (h) => <Habit id={h.id}><h1> {h.name} </h1>
                                     <Days> {week.map ((d, i) => 
                                     h.days.includes(i) ? 
                                     <div className="on">{d}</div> 
                                     : <div className="off">{d}</div> )} </Days>
-                                    <img src={icone} alt="lixeira" /></Habit>)
+                                    <button onClick={() => deleteHabit(h.id)}><img src={icone} alt="lixeira" /></button></Habit>)
                 }
 
             </Main>
@@ -121,12 +138,17 @@ const Habit = styled.div`
         color: #666666;
     }
 
-    img {
-        width: 15px;
-        height: 15px;
+    button {
+        width: 17px;
+        height: 17px;
+        background-color: white;
         position: absolute;
         right: 10px;
         top: 10px;
+        img {
+            width: 15px;
+            height: 15px;
+        }
     }
 `
 
