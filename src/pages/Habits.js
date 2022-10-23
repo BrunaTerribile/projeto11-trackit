@@ -15,7 +15,6 @@ export default function Habits() {
 
     useEffect(() => {
         const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits'
-        const token = userData.token
 
         axios.get(URL, header)
             .then((res) => {
@@ -39,14 +38,11 @@ export default function Habits() {
                 .then((res) => {
                     console.log(res.data)
                     console.log("habito excluido do servidor")
-                    // let n = counter + 1
-                    setCounter(counter+1)
+                    setCounter(counter-1)
                 })
                 .catch((err) => { console.log(err) })
         }
     }
-
-    console.log("console antes do return", myHabits)
 
     return (
         <>
@@ -78,7 +74,7 @@ export default function Habits() {
 
 const Main = styled.div`
     width: 100%;
-    height: auto;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;

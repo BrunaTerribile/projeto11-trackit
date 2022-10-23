@@ -1,11 +1,12 @@
 import styled from "styled-components"
 import logo from "../assets/logo.jpg"
+import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/auth";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { Link } from "react-router-dom";
+//import { ThreeDots } from  'react-loader-spinner'
 
 export default function Login() {
 
@@ -13,7 +14,7 @@ export default function Login() {
     const [password, setPassword] = useState(undefined)
 
     const { signIn, user, setUserData } = useContext(AuthContext)
-    
+
     const navigate = useNavigate()
 
     function handleLogin(e){
@@ -32,12 +33,10 @@ export default function Login() {
             .then((res) => {
                 console.log(res.data)
                 setUserData(res.data)
-                alert("Seja bem-vindo!")
                 navigate("/hoje")
             })
             .catch((err) => {
-                alert(`Algo de errado não está certo. ${err.response.data.message}
-                Tente novamente!`)
+                alert(`Algo de errado não está certo. \n${err.response.data.message} \nTente novamente!`)
                 console.log(err)
             })
     }
@@ -70,6 +69,20 @@ export default function Login() {
         </PageContainer>
     )
 }
+
+//if(email === undefined & password === undefined){
+//     return (
+//         <ThreeDots 
+//             height="80" 
+//             width="80" 
+//             radius="9"
+//             color="#4fa94d" 
+//             ariaLabel="three-dots-loading"
+//             wrapperStyle={{}}
+//             wrapperClassName=""
+//             visible={true}
+//         />)
+// }
 
 const PageContainer = styled.div`
     display: flex;

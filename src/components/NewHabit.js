@@ -8,23 +8,23 @@ export default function NewHabit({setCounter, counter}) {
     const days = ["D", "S", "T", "Q", "Q", "S", "S"]
     const [selecDay, setSelecDay] = useState([])
     const [habitName, setHabitName] = useState("")
-    const { userData, setShowBox, myHabits, setMyHabits } = useContext(AuthContext)
+    const { userData, setShowBox } = useContext(AuthContext)
     const header = { headers: { 'Authorization': `Bearer ${userData.token}` } }
 
     function selectDay(i) {
         console.log(i)
 
-        if (!selecDay.includes(i)) { //seleciona o dia da semana
+        if (!selecDay.includes(i)) { //marca o dia da semana
             const thisDay = i
             setSelecDay([...selecDay, thisDay])
             console.log(selecDay)
-        } else if (selecDay.includes(i)) { //des-seleciona o dia
+        } else if (selecDay.includes(i)) { //desmarca o dia da semana
             const removeDay = selecDay.filter((d) => d !== i)
             setSelecDay(removeDay)
         }
     }
 
-    function saveHabit() {
+    function saveHabit() { //salva e envia o novo habito para o servidor
 
         const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits'
         const body = {
@@ -39,7 +39,7 @@ export default function NewHabit({setCounter, counter}) {
                 setShowBox(false)
                 setCounter(counter+1)
             })
-            .catch((err) => {console.log(err)})
+            .catch((err) => { alert(`Não foi possível cadastrar esse novo hábito! \n${err.response.data.message}`)})
     }
 
 

@@ -33,8 +33,7 @@ export default function SignUp() {
                 navigate("/")
             })
             .catch((err) => {
-                alert(`Não foi possível finalizar seu cadastro. ${err.response.data.message}
-                Tente novamente!`)
+                alert(`Não foi possível finalizar seu cadastro. \n${err.response.data.message} \nTente novamente!`)
                 console.log(err)
             })
     }

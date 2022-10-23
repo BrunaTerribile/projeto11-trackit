@@ -42,7 +42,7 @@ export default function History() {
 
 const Main = styled.div`
     width: 100%;
-    height: auto;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;

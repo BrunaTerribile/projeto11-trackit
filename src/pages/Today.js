@@ -94,13 +94,14 @@ export default function Today() {
 
 const Main = styled.div`
     width: 100%;
-    height: auto;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     font-family: 'Lexend Deca', sans-serif;
     background-color: #E5E5E5;
     padding: 0 18px;
+    z-index: 0;
 
     p {
         font-size: 18px;

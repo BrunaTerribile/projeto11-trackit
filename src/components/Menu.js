@@ -1,13 +1,13 @@
 import styled from "styled-components"
-import { Link } from "react-router-dom"
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../context/auth";
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
-
-export default function Menu(props) {
+export default function Menu() {
     const navigate = useNavigate()
-    const percentage = 66;
+    const { percentage } = useContext(AuthContext)
 
     return (
         <BottomBar>
@@ -43,7 +43,7 @@ const BottomBar = styled.div`
     font-size: 18px;
     z-index: 2;
     text-decoration: none;
-    border: 1px solid grey;
+    background-color: white;
 
     .progress {
         z-index: 3;
