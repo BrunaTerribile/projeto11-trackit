@@ -4,11 +4,12 @@ import { useContext } from "react";
 import { AuthContext } from "../context/auth";
 import axios from "axios";
 
-export default function NewHabit() {
+export default function NewHabit({setCounter, counter}) {
     const days = ["D", "S", "T", "Q", "Q", "S", "S"]
     const [selecDay, setSelecDay] = useState([])
     const [habitName, setHabitName] = useState("")
     const { userData, setShowBox, myHabits, setMyHabits } = useContext(AuthContext)
+    const header = { headers: { 'Authorization': `Bearer ${userData.token}` } }
 
     function selectDay(i) {
         console.log(i)
@@ -30,14 +31,13 @@ export default function NewHabit() {
             name: habitName,
             days: selecDay.sort()
         }
-        const token = userData.token
         
-        axios.post(URL, body, {headers: {'Authorization': `Bearer ${token}`}})
+        axios.post(URL, body, header)
             .then((res) => {
                 console.log("hábito registrado com sucesso!")
                 console.log(res.data)
-               // let lastHabit = (res.data)
-                //setMyHabits(...myHabits, lastHabit )
+                setShowBox(false)
+                setCounter(counter+1)
             })
             .catch((err) => {console.log(err)})
     }
