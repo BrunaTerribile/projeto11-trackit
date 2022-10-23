@@ -2,31 +2,81 @@ import styled from "styled-components"
 import Header from "../components/Header"
 import Menu from "../components/Menu"
 import check from "../assets/check.png"
+import dayjs from 'dayjs'
+import ptBr from 'dayjs/locale/pt-br'
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../context/auth";
+import axios from "axios"
 
 export default function Today() {
+    const [todayHabits, setTodayHabits] = useState([])
+    const [done, setDone] = useState([])
+    const { userData } = useContext(AuthContext)
+    const header = { headers: { 'Authorization': `Bearer ${userData.token}` } }
+
+    dayjs.locale(ptBr)
+    var now = dayjs().format('dddd, DD/MM')
+
+    useEffect(() => {
+
+        const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today'
+
+        axios.get(URL, header) //buscar meus habitos
+            .then ((res) => {
+                console.log(res.data)
+                setTodayHabits(res.data)
+            })
+            .catch((err) => console.log(err))
+
+    }, [])
+
+    function checkHabit(h){ //selecionar ou deselecionar um habito
+        
+        let selecId = (h.id)
+        const URLcheck = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${selecId}/check`
+        const URLuncheck = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${selecId}/uncheck`
+
+        if(!done.includes(selecId)){
+            console.log("selecionou", selecId);
+            setDone([...done, selecId])
+            
+            axios.post(URLcheck, null, header)
+                .then ((res) => {
+                    console.log("deu certo", res.data)
+                })
+                .catch((err) => console.log(err))
+        } else {
+            console.log("dessssselecionou", selecId);
+            const newDone = done.filter( (d) => d !== selecId)
+            setDone(newDone)
+            
+            axios.post(URLuncheck, null, header)
+            .then ((res) => {
+                console.log(res.data)
+            })
+            .catch((err) => console.log(err))
+        }   
+    }
+
+    console.log(done)
+
+
     return (
         <>
             <Header />
 
             <Main>
                 <Title>
-                    <h1> Segunda, 17/05 </h1>
+                    <h1> {now} </h1>
                     <h2> 67% dos hábitos concluídos </h2>
                 </Title>
 
-                <MyHabit>
-                    <h1> Ler 1 capítulo de livro </h1>
-                    <h2> Sequência atual: 3 dias </h2>
-                    <h2> Seu recorde: 5 dias </h2>
-                    <div> <img src={check} alt="icone concluído"/> </div>
-                </MyHabit>
-
-                <MyHabit>
-                    <h1> Ler 1 capítulo de livro </h1>
-                    <h2> Sequência atual: 3 dias </h2>
-                    <h2> Seu recorde: 5 dias </h2>
-                    <div> <img src={check} alt="icone concluído" /> </div>
-                </MyHabit>
+                {todayHabits.map( (h) => <MyHabit>
+                    <h1> {h.name} </h1>
+                    <h2> Sequência atual: {h.currentSequence} dias </h2>
+                    <h2> Seu recorde: {h.highestSequence} dias </h2>
+                    <div onClick={() => checkHabit(h)} className={done.includes(h.id) ? 'true' : 'false'}> <img src={check} alt="icone concluído" /> </div>
+                </MyHabit>)}
             </Main>
 
             <Menu />
@@ -95,7 +145,6 @@ const MyHabit = styled.div`
     div {
         width: 69px;
         height: 69px;
-        background-color: #8FC549;
         position: absolute;
         right: 13px;
         top: 13px;
@@ -108,5 +157,13 @@ const MyHabit = styled.div`
     img {
         width: 35px;
         height: 28px;
+    }
+
+    .false {
+        background-color: #EBEBEB;
+    }
+
+    .true {
+        background-color: #8FC549;
     }
 `
