@@ -11,11 +11,15 @@ import axios from "axios"
 export default function Today() {
     const [todayHabits, setTodayHabits] = useState([])
     const [done, setDone] = useState([])
-    const { userData } = useContext(AuthContext)
+    const [render, setRender] = useState(0)
+    const { userData, setPercentage, percentage } = useContext(AuthContext)
     const header = { headers: { 'Authorization': `Bearer ${userData.token}` } }
 
     dayjs.locale(ptBr)
     var now = dayjs().format('dddd, DD/MM')
+
+    let p = ((done.length)/(todayHabits.length) * 100).toFixed(0)
+    setPercentage(p)
 
     useEffect(() => {
 
@@ -23,14 +27,13 @@ export default function Today() {
 
         axios.get(URL, header) //buscar meus habitos
             .then ((res) => {
-                console.log(res.data)
                 setTodayHabits(res.data)
             })
             .catch((err) => console.log(err))
 
-    }, [])
+    }, [render])
 
-    function checkHabit(h){ //selecionar ou deselecionar um habito
+    function checkHabit(h){ //selecionar ou desselecionar um habito
         
         let selecId = (h.id)
         const URLcheck = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${selecId}/check`
@@ -40,9 +43,10 @@ export default function Today() {
             console.log("selecionou", selecId);
             setDone([...done, selecId])
             
-            axios.post(URLcheck, null, header)
+            axios.post(URLcheck, selecId, header)
                 .then ((res) => {
-                    console.log("deu certo", res.data)
+                    console.log("check", res.data)
+                    setRender(render+1)
                 })
                 .catch((err) => console.log(err))
         } else {
@@ -50,16 +54,17 @@ export default function Today() {
             const newDone = done.filter( (d) => d !== selecId)
             setDone(newDone)
             
-            axios.post(URLuncheck, null, header)
+            axios.post(URLuncheck, selecId, header)
             .then ((res) => {
-                console.log(res.data)
+                console.log("uncheck", res.data)
+                setRender(render-1)
             })
             .catch((err) => console.log(err))
         }   
     }
 
     console.log(done)
-
+    console.log(todayHabits)
 
     return (
         <>
@@ -68,14 +73,17 @@ export default function Today() {
             <Main>
                 <Title>
                     <h1> {now} </h1>
-                    <h2> 67% dos hábitos concluídos </h2>
+                    {percentage > 0 ? <h3> {percentage}% dos hábitos concluídos </h3> : <h2> Nenhum hábito concluído ainda </h2>}
+
                 </Title>
 
                 {todayHabits.map( (h) => <MyHabit>
                     <h1> {h.name} </h1>
                     <h2> Sequência atual: {h.currentSequence} dias </h2>
                     <h2> Seu recorde: {h.highestSequence} dias </h2>
-                    <div onClick={() => checkHabit(h)} className={done.includes(h.id) ? 'true' : 'false'}> <img src={check} alt="icone concluído" /> </div>
+                    <div onClick={() => checkHabit(h)} 
+                         className={done.includes(h.id) ? 'true' : 'false'}> 
+                         <img src={check} alt="icone concluído" /> </div>
                 </MyHabit>)}
             </Main>
 
@@ -117,6 +125,11 @@ const Title =  styled.div`
     }
 
     h2 {
+        font-size: 18px;
+        color: #BABABA;
+    }
+
+    h3 {
         font-size: 18px;
         color: #8FC549;
     }

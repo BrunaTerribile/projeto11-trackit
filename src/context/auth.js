@@ -8,7 +8,9 @@ export default function AuthProvider({children}){
     const [user, setUser] = useState({})
     const [userData, setUserData] = useState({})
     const [showBox, setShowBox] = useState(false)
-    const [myHabits, setMyHabits] = useState([])
+    const [myHabits, setMyHabits] = useState(undefined)
+
+    const [percentage, setPercentage] = useState("")
 
     function signIn(email, password, name, photo){
         if(email !== '' && password !== ''){
@@ -23,7 +25,8 @@ export default function AuthProvider({children}){
     }
     
     return (
-        <AuthContext.Provider value={{signIn, user, userData, setUserData, showBox, setShowBox, myHabits, setMyHabits}}>
+        <AuthContext.Provider value={{signIn, user, userData, setUserData, showBox, setShowBox, 
+                                    myHabits, setMyHabits, percentage, setPercentage}}>
             {children}
         </AuthContext.Provider>
     )
