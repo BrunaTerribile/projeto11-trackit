@@ -1,8 +1,27 @@
 import styled from "styled-components"
 import Header from "../components/Header"
 import Menu from "../components/Menu"
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../context/auth";
+import axios from "axios";
 
 export default function History() {
+    const { userData } = useContext(AuthContext)
+    const { hist, setHist } = useState([])
+    const header = { headers: { 'Authorization': `Bearer ${userData.token}` } }
+
+    useEffect( () => {
+
+        const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/history/daily'
+
+        axios.get(URL, {}, header)
+            .then( (res) => {
+                console.log(res.data)
+                setHist(res.data)
+            })
+            .catch((err) => console.log(err))
+    }, [])
+    
     return (
         <>
             <Header />
@@ -13,6 +32,7 @@ export default function History() {
                 </Title>
 
                 <p> Em breve você poderá ver o histórico dos seus hábitos aqui! </p>
+
             </Main>
 
             <Menu />
