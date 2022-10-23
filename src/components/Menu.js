@@ -11,7 +11,7 @@ export default function Menu() {
 
     return (
         <BottomBar>
-            <StyledLink to={'/habitos'}><h1>Hábitos</h1></StyledLink>
+            <StyledLink to={'/habitos'} data-identifier="habit-page-action"><h1>Hábitos</h1></StyledLink>
                 
             <div onClick={() => navigate('/hoje')} className="progress" >
                 <CircularProgressbar value={percentage} text={`Hoje`} 
@@ -26,7 +26,7 @@ export default function Menu() {
                                         backgroundPadding={6}
                 /> </div>
 
-            <StyledLink to={'/historico'}><h1>Histórico</h1></StyledLink>
+            <StyledLink to={'/historico'} data-identifier="historic-page-action"><h1>Histórico</h1></StyledLink>
         </BottomBar>
     )
 }

@@ -51,18 +51,18 @@ export default function Habits() {
             <Main>
                 <Title>
                     <h1>Meus hábitos</h1>
-                    <button onClick={() => setShowBox(true)}> + </button>
+                    <button onClick={() => setShowBox(true)} data-identifier="create-habit-btn"> + </button>
                 </Title>
 
                 {showBox && <NewHabit setCounter={setCounter} counter={counter}/>}
 
-                {myHabits ? myHabits.map((h) => <Habit id={h.id}> <h1> {h.name} </h1>
+                {myHabits ? myHabits.map((h) => <Habit id={h.id}> <h1 data-identifier="habit-name"> {h.name} </h1>
                                 <Days> {week.map((d, i) => h.days.includes(i) ? 
                                 <div className="on">{d}</div>
                                 :<div className="off">{d}</div>)} </Days>
-                                <button onClick={() => deleteHabit(h.id)}><img src={icone} alt="lixeira" /></button>
+                                <button onClick={() => deleteHabit(h.id)} data-identifier="delete-habit-btn"><img src={icone} alt="lixeira" /></button>
                                 </Habit>)
-                : <p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>
+                : <p data-identifier="no-habit-message">Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>
                 }
 
             </Main>

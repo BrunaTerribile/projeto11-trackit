@@ -72,17 +72,18 @@ export default function Today() {
 
             <Main>
                 <Title>
-                    <h1> {now} </h1>
-                    {percentage > 0 ? <h3> {percentage}% dos hábitos concluídos </h3> : <h2> Nenhum hábito concluído ainda </h2>}
+                    <h1 data-identifier="today-infos"> {now} </h1>
+                    {percentage > 0 ? <h3 data-identifier="today-infos"> {percentage}% dos hábitos concluídos </h3> : <h2> Nenhum hábito concluído ainda </h2>}
 
                 </Title>
 
-                {todayHabits.map( (h) => <MyHabit>
+                {todayHabits.map( (h) => <MyHabit data-identifier="today-infos"> 
                     <h1> {h.name} </h1>
                     <h2> Sequência atual: {h.currentSequence} dias </h2>
                     <h2> Seu recorde: {h.highestSequence} dias </h2>
                     <div onClick={() => checkHabit(h)} 
-                         className={done.includes(h.id) ? 'true' : 'false'}> 
+                         className={done.includes(h.id) ? 'true' : 'false'}
+                         data-identifier="done-habit-btn"> 
                          <img src={check} alt="icone concluído" /> </div>
                 </MyHabit>)}
             </Main>

@@ -52,14 +52,15 @@ export default function NewHabit({setCounter, counter}) {
                 value={habitName}
                 required
                 onChange={(e) => setHabitName(e.target.value)}
+                data-identifier="input-habit-name"
             />
             <Days>
-                {days.map((d, i) => selecDay.includes(i) ? <div className='on' key={i} onClick={() => selectDay(i)} >{d}</div>
-                    : <div className='off' key={i} onClick={() => selectDay(i)} >{d}</div>)}
+                {days.map((d, i) => selecDay.includes(i) ? <div className='on' key={i} onClick={() => selectDay(i)} data-identifier="week-day-btn">{d}</div>
+                    : <div className='off' key={i} onClick={() => selectDay(i)} data-identifier="week-day-btn">{d}</div>)}
             </Days>
             <Buttons>
-                <button className="white" onClick={() => setShowBox(false)}>Cancelar</button>
-                <button className="blue" type="submit" onClick={saveHabit}>Salvar</button>
+                <button className="white" onClick={() => setShowBox(false)} data-identifier="cancel-habit-create-btn">Cancelar</button>
+                <button className="blue" type="submit" onClick={saveHabit} data-identifier="save-habit-create-btn">Salvar</button>
             </Buttons>
         </New>
     )

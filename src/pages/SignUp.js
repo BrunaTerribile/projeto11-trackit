@@ -50,6 +50,7 @@ export default function SignUp() {
                     value={email}
                     required
                     onChange={e => setEmail(e.target.value)}
+                    data-identifier="input-email"
                 />
                 <input
                     name="password"
@@ -58,6 +59,7 @@ export default function SignUp() {
                     value={password}
                     required
                     onChange={e => setPassword(e.target.value)}
+                    data-identifier="input-password"
                 />
                 <input
                     name="name"
@@ -66,6 +68,7 @@ export default function SignUp() {
                     value={name}
                     required
                     onChange={e => setName(e.target.value)}
+                    data-identifier="input-name"
                 />
                 <input
                     name="photo"
@@ -74,11 +77,12 @@ export default function SignUp() {
                     value={photo}
                     required
                     onChange={e => setPhoto(e.target.value)}
+                    data-identifier="input-photo"
                 />
                 <button type="submit" onClick={registerUser}> Cadastrar </button>
             </Form>
 
-            <Link to="/"> Já tem uma conta? Faça login! </Link>
+            <Link to="/" data-identifier="back-to-login-action"> Já tem uma conta? Faça login! </Link>
         </PageContainer>
     )
 }

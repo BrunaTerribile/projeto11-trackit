@@ -53,6 +53,7 @@ export default function Login() {
                     value={email}
                     required
                     onChange={e => setEmail(e.target.value)}
+                    data-identifier="input-email"
                 />
                 <input
                     name="senha"
@@ -61,11 +62,12 @@ export default function Login() {
                     value={password}
                     required
                     onChange={e => setPassword(e.target.value)}
+                    data-identifier="input-password"
                 />
-                <button type="submit" onClick={handleLogin}> Entrar </button>
+                <button type="submit" onClick={handleLogin} data-identifier="login-btn"> Entrar </button>
             </Form>
 
-            <Link to="/cadastro"> Não tem uma conta? Cadastre-se! </Link>
+            <Link to="/cadastro" data-identifier="sign-up-action" > Não tem uma conta? Cadastre-se! </Link>
         </PageContainer>
     )
 }

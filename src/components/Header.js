@@ -11,7 +11,7 @@ export default function Header() {
     return (
         <Head>
             <h1>TrackIt</h1>
-            {userData.image !== '' ? (<img src={userData.image} alt="foto do usuário"/>) : (<img src={photo} alt="foto do usuário"/>)}
+            {userData.image !== '' ? (<img src={userData.image} alt="foto do usuário" data-identifier="avatar"/>) : (<img src={photo} alt="foto do usuário" data-identifier="avatar"/>)}
         </Head>
     )
 }
