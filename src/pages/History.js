@@ -11,9 +11,7 @@ export default function History() {
     const header = { headers: { 'Authorization': `Bearer ${userData.token}` } }
 
     useEffect( () => {
-
         const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/history/daily'
-
         axios.get(URL, {}, header)
             .then( (res) => {
                 console.log(res.data)
@@ -30,9 +28,7 @@ export default function History() {
                 <Title>
                     <h1> Histórico </h1>
                 </Title>
-
                 <p> Em breve você poderá ver o histórico dos seus hábitos aqui! </p>
-
             </Main>
 
             <Menu />
@@ -57,7 +53,6 @@ const Main = styled.div`
         margin-top: 10px;
     }
 `
-
 const Title =  styled.div`
     width: 100%;
     height: 75px;

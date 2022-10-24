@@ -4,14 +4,14 @@ import { AuthContext } from "../context/auth";
 import photo from "../assets/userback.png"
 
 export default function Header() {
-
     const { userData } = useContext(AuthContext)
-    //console.log(userData)
 
     return (
         <Head>
             <h1>TrackIt</h1>
-            {userData.image !== '' ? (<img src={userData.image} alt="foto do usuário" data-identifier="avatar"/>) : (<img src={photo} alt="foto do usuário" data-identifier="avatar"/>)}
+            {userData.image !== '' ? 
+            (<img src={userData.image} alt="foto do usuário" data-identifier="avatar"/>) 
+            :(<img src={photo} alt="foto do usuário" data-identifier="avatar"/>)}
         </Head>
     )
 }

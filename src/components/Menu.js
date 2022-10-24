@@ -20,7 +20,6 @@ export default function Menu() {
                                         width: `100px`,
                                         heigth: `100px`,
                                         backgroundColor: "#52B6FF",
-                                        pathColor: "#fff",
                                         trailColor: "transparent"})}
                                         background
                                         backgroundPadding={6}
