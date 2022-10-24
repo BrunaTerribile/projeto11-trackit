@@ -6,22 +6,19 @@ import { useContext } from "react";
 import { AuthContext } from "../context/auth";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-//import { ThreeDots } from  'react-loader-spinner'
+import { ThreeDots } from 'react-loader-spinner'
 
 export default function Login() {
-
     const [email, setEmail] = useState(undefined)
     const [password, setPassword] = useState(undefined)
-
-    const { signIn, user, setUserData } = useContext(AuthContext)
-
+    const { signIn, user, setUserData, loading, setLoading } = useContext(AuthContext)
     const navigate = useNavigate()
 
-    function handleLogin(e){
+    function handleLogin(e) {
         e.preventDefault();
+        setLoading(true)
 
         signIn(email, password)
-        console.log("dados armazenados");
 
         const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login'
         const body = {
@@ -31,21 +28,22 @@ export default function Login() {
 
         axios.post(URL, body)
             .then((res) => {
-                console.log(res.data)
                 setUserData(res.data)
                 navigate("/hoje")
+                setLoading(false)
             })
             .catch((err) => {
                 alert(`Algo de errado não está certo. \n${err.response.data.message} \nTente novamente!`)
                 console.log(err)
+                setLoading(false)
             })
     }
 
     return (
         <PageContainer>
-            <img src={logo} alt="logo"/>
+            <img src={logo} alt="logo" />
 
-            <Form>
+            <Form onSubmit={handleLogin}>
                 <input
                     name="email"
                     placeholder="email"
@@ -54,6 +52,7 @@ export default function Login() {
                     required
                     onChange={e => setEmail(e.target.value)}
                     data-identifier="input-email"
+                    disabled={loading ? true : false}
                 />
                 <input
                     name="senha"
@@ -63,28 +62,25 @@ export default function Login() {
                     required
                     onChange={e => setPassword(e.target.value)}
                     data-identifier="input-password"
+                    disabled={loading ? true : false}
                 />
-                <button type="submit" onClick={handleLogin} data-identifier="login-btn"> Entrar </button>
+                <button type="submit" data-identifier="login-btn">
+                    {loading ? <ThreeDots height="80"
+                        width="50"
+                        radius="9"
+                        color="white"
+                        ariaLabel="three-dots-loading"
+                        wrapperStyle={{}}
+                        wrapperClassName=""
+                        visible={true}/> 
+                        : <h1>Entrar</h1> } 
+                </button>
             </Form>
 
             <Link to="/cadastro" data-identifier="sign-up-action" > Não tem uma conta? Cadastre-se! </Link>
         </PageContainer>
     )
 }
-
-//if(email === undefined & password === undefined){
-//     return (
-//         <ThreeDots 
-//             height="80" 
-//             width="80" 
-//             radius="9"
-//             color="#4fa94d" 
-//             ariaLabel="three-dots-loading"
-//             wrapperStyle={{}}
-//             wrapperClassName=""
-//             visible={true}
-//         />)
-// }
 
 const PageContainer = styled.div`
     display: flex;
@@ -126,5 +122,9 @@ const Form = styled.form`
                 color: #DBDBDB;
                 font-style: normal;
             }
+        
+        :disabled{
+            background-color: #F2F2F2;
+        }
     }
 `

@@ -6,35 +6,32 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useContext } from "react";
 import { AuthContext } from "../context/auth";
+import { ThreeDots } from 'react-loader-spinner'
 
 export default function SignUp() {
-
     const [email, setEmail] = useState(undefined)
     const [password, setPassword] = useState(undefined)
     const [name, setName] = useState(undefined)
     const [photo, setPhoto] = useState(undefined)
-
-    const { signIn, user } = useContext(AuthContext)
-
+    const { signIn, user, loading, setLoading } = useContext(AuthContext)
     const navigate = useNavigate()
 
     function registerUser(e){
         e.preventDefault();
+        setLoading(true)
 
         signIn(email, password, name, photo)
-        console.log("dados enviados para user")
 
         const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up'
-
         axios.post(URL, user)
             .then((res) => {
-                console.log(res.data)
-                console.log("Usuário cadastrado com sucesso!")
                 navigate("/")
+                setLoading(false)
             })
             .catch((err) => {
                 alert(`Não foi possível finalizar seu cadastro. \n${err.response.data.message} \nTente novamente!`)
                 console.log(err)
+                setLoading(false)
             })
     }
 
@@ -42,7 +39,7 @@ export default function SignUp() {
         <PageContainer>
             <img src={logo} alt="logo"/>
 
-            <Form>
+            <Form onSubmit={registerUser}>
                 <input
                     name="email"
                     placeholder="email"
@@ -51,6 +48,7 @@ export default function SignUp() {
                     required
                     onChange={e => setEmail(e.target.value)}
                     data-identifier="input-email"
+                    disabled={loading ? true : false}
                 />
                 <input
                     name="password"
@@ -60,6 +58,7 @@ export default function SignUp() {
                     required
                     onChange={e => setPassword(e.target.value)}
                     data-identifier="input-password"
+                    disabled={loading ? true : false}
                 />
                 <input
                     name="name"
@@ -69,6 +68,7 @@ export default function SignUp() {
                     required
                     onChange={e => setName(e.target.value)}
                     data-identifier="input-name"
+                    disabled={loading ? true : false}
                 />
                 <input
                     name="photo"
@@ -78,8 +78,18 @@ export default function SignUp() {
                     required
                     onChange={e => setPhoto(e.target.value)}
                     data-identifier="input-photo"
+                    disabled={loading ? true : false}
                 />
-                <button type="submit" onClick={registerUser}> Cadastrar </button>
+                <button type="submit"> {loading ? <ThreeDots height="80"
+                        width="50"
+                        radius="9"
+                        color="white"
+                        ariaLabel="three-dots-loading"
+                        wrapperStyle={{}}
+                        wrapperClassName=""
+                        visible={true}/> 
+                        : <h1>Cadastrar</h1> }  
+                </button>
             </Form>
 
             <Link to="/" data-identifier="back-to-login-action"> Já tem uma conta? Faça login! </Link>
@@ -127,5 +137,9 @@ const Form = styled.form`
                 color: #DBDBDB;
                 font-style: normal;
             }
+            
+        :disabled{
+            background-color: #F2F2F2;
+        }
     }
 `

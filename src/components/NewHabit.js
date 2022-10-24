@@ -1,23 +1,21 @@
+import axios from "axios";
 import styled from "styled-components"
 import { useState } from "react"
 import { useContext } from "react";
 import { AuthContext } from "../context/auth";
-import axios from "axios";
+import { ThreeDots } from 'react-loader-spinner'
 
 export default function NewHabit({setCounter, counter}) {
     const days = ["D", "S", "T", "Q", "Q", "S", "S"]
     const [selecDay, setSelecDay] = useState([])
     const [habitName, setHabitName] = useState("")
-    const { userData, setShowBox } = useContext(AuthContext)
+    const { userData, setShowBox, loading, setLoading } = useContext(AuthContext)
     const header = { headers: { 'Authorization': `Bearer ${userData.token}` } }
 
     function selectDay(i) {
-        console.log(i)
-
         if (!selecDay.includes(i)) { //marca o dia da semana
             const thisDay = i
             setSelecDay([...selecDay, thisDay])
-            console.log(selecDay)
         } else if (selecDay.includes(i)) { //desmarca o dia da semana
             const removeDay = selecDay.filter((d) => d !== i)
             setSelecDay(removeDay)
@@ -25,6 +23,7 @@ export default function NewHabit({setCounter, counter}) {
     }
 
     function saveHabit() { //salva e envia o novo habito para o servidor
+        setLoading(true)
 
         const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits'
         const body = {
@@ -34,14 +33,14 @@ export default function NewHabit({setCounter, counter}) {
         
         axios.post(URL, body, header)
             .then((res) => {
-                console.log("hábito registrado com sucesso!")
-                console.log(res.data)
                 setShowBox(false)
                 setCounter(counter+1)
+                setLoading(false)
             })
-            .catch((err) => { alert(`Não foi possível cadastrar esse novo hábito! \n${err.response.data.message}`)})
+            .catch((err) => { 
+                alert(`Não foi possível cadastrar esse novo hábito! \n${err.response.data.message}`)
+                setLoading(false)})
     }
-
 
     return (
         <New>
@@ -53,14 +52,36 @@ export default function NewHabit({setCounter, counter}) {
                 required
                 onChange={(e) => setHabitName(e.target.value)}
                 data-identifier="input-habit-name"
+                disabled={loading ? true : false}
             />
             <Days>
-                {days.map((d, i) => selecDay.includes(i) ? <div className='on' key={i} onClick={() => selectDay(i)} data-identifier="week-day-btn">{d}</div>
-                    : <div className='off' key={i} onClick={() => selectDay(i)} data-identifier="week-day-btn">{d}</div>)}
+                {days.map((d, i) => selecDay.includes(i) ? 
+                    <div className='on' 
+                        key={i} 
+                        onClick={() => selectDay(i)} 
+                        data-identifier="week-day-btn"
+                        disabled={loading ? true : false}
+                    >{d}</div>
+                    :<div className='off' 
+                        key={i} 
+                        onClick={() => selectDay(i)} 
+                        data-identifier="week-day-btn"
+                        disabled={loading ? true : false}
+                    >{d}</div>)}
             </Days>
             <Buttons>
                 <button className="white" onClick={() => setShowBox(false)} data-identifier="cancel-habit-create-btn">Cancelar</button>
-                <button className="blue" type="submit" onClick={saveHabit} data-identifier="save-habit-create-btn">Salvar</button>
+                <button className="blue" type="submit" onClick={saveHabit} data-identifier="save-habit-create-btn">
+                {loading ? <ThreeDots height="80"
+                        width="40"
+                        radius="9"
+                        color="white"
+                        ariaLabel="three-dots-loading"
+                        wrapperStyle={{}}
+                        wrapperClassName=""
+                        visible={true}/> 
+                        : <h1>Salvar</h1>} 
+                </button>
             </Buttons>
         </New>
     )
@@ -84,6 +105,10 @@ const New = styled.div`
         ::placeholder {
             color: #DBDBDB;
             font-style: normal;
+        }
+
+        :disabled {
+            background-color: #F2F2F2;
         }
     }
 `
@@ -112,7 +137,6 @@ const Days = styled.div`
         color: white;
     }
 `
-
 const Buttons = styled.div`
     display: flex;
     align-items: center;

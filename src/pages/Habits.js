@@ -6,23 +6,28 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/auth";
 import icone from "../assets/trash-outline.svg"
 import axios from "axios"
+import { ThreeDots } from 'react-loader-spinner'
 
 export default function Habits() {
     const week = ["D", "S", "T", "Q", "Q", "S", "S"]
     const [counter, setCounter] = useState(0)
-    const { showBox, setShowBox, userData, myHabits, setMyHabits} = useContext(AuthContext)
+    const { showBox, setShowBox, userData, myHabits, setMyHabits, loading, setLoading } = useContext(AuthContext)
     const header = { headers: { 'Authorization': `Bearer ${userData.token}` } }
 
     useEffect(() => {
-        const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits'
+        setLoading(true)
 
+        const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits'
         axios.get(URL, header)
             .then((res) => {
                 let habitsArr = (res.data)
                 setMyHabits(habitsArr)
-                console.log("lista atualizada:", habitsArr)
+                setLoading(false)
             })
-            .catch((err) => { console.log(err) })
+            .catch((err) => {
+                console.log(err)
+                setLoading(false)
+            })
     }, [counter])
 
     function deleteHabit(props) {
@@ -33,13 +38,8 @@ export default function Habits() {
             setMyHabits(newList)
 
             const URL = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${thisId}`
-
-            axios.delete(URL, header)
-                .then((res) => {
-                    console.log(res.data)
-                    console.log("habito excluido do servidor")
-                    setCounter(counter-1)
-                })
+            axios.delete(URL, {}, header)
+                .then((res) => {setCounter(counter - 1)})
                 .catch((err) => { console.log(err) })
         }
     }
@@ -54,17 +54,24 @@ export default function Habits() {
                     <button onClick={() => setShowBox(true)} data-identifier="create-habit-btn"> + </button>
                 </Title>
 
-                {showBox && <NewHabit setCounter={setCounter} counter={counter}/>}
+                {showBox && <NewHabit setCounter={setCounter} counter={counter} />}
 
-                {myHabits ? myHabits.map((h) => <Habit id={h.id}> <h1 data-identifier="habit-name"> {h.name} </h1>
-                                <Days> {week.map((d, i) => h.days.includes(i) ? 
-                                <div className="on">{d}</div>
-                                :<div className="off">{d}</div>)} </Days>
-                                <button onClick={() => deleteHabit(h.id)} data-identifier="delete-habit-btn"><img src={icone} alt="lixeira" /></button>
-                                </Habit>)
-                : <p data-identifier="no-habit-message">Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>
-                }
+                {myHabits ? myHabits.map((h) => <Habit key={h.id}> <h1 data-identifier="habit-name"> {h.name} </h1>
+                    <Days> {week.map((d, i) => h.days.includes(i) ?
+                        <div className="on">{d}</div>
+                        : <div className="off">{d}</div>)} </Days>
+                    <button onClick={() => deleteHabit(h.id)} data-identifier="delete-habit-btn"><img src={icone} alt="lixeira" /></button>
+                </Habit>)
+                    : <p data-identifier="no-habit-message">Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>}
 
+                {loading ? <ThreeDots height="80"
+                    width="50"
+                    radius="9"
+                    color="white"
+                    ariaLabel="three-dots-loading"
+                    wrapperStyle={{}}
+                    wrapperClassName=""
+                    visible={true} /> : ""}
             </Main>
 
             <Menu />
